@@ -1,11 +1,10 @@
-<?php include "includes/header.php" ?>
+<!--Admin Header-->
+<?php include "includes/admin_header.php" ?>
 
 <body>
-
 <div id="wrapper">
-
-    <!--Navigation-->
-    <?php include "includes/navigation.php" ?>
+    <!--Admin Navigation-->
+    <?php include "includes/admin_navigation.php" ?>
 
     <div id="page-wrapper">
 
@@ -18,15 +17,47 @@
                         Welcome to Admin
                         <small>Author</small>
                     </h1>
-                    <!--                        <ol class="breadcrumb">-->
-                    <!--                            <li>-->
-                    <!--                                <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>-->
-                    <!--                            </li>-->
-                    <!--                            <li class="active">-->
-                    <!--                                <i class="fa fa-file"></i> Footer Works-->
-                    <!--                            </li>-->
-                    <!--                        </ol>-->
-                </div>
+                    <!--form added here john-->
+                    <div class="col-xs-4">
+                        <!--Insert category query-->
+                        <?php insert_categories(); ?>
+
+                        <form action="" method="post">
+                            <div class="form-group">
+                                <label for="cat_title">Add Category</label>
+                                <input class="form-control" type="text" name="cat_title">
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary" type="submit" name="submit" value="Add Category">
+                            </div>
+                        </form>
+                        <!--Update include query-->
+                        <?php update_categories(); ?>
+
+                    </div><!--Add category form-->
+
+                    <div class="col-xs-4">
+                        <table class="table table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Category Title</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <!--Display the categories from DB in a table using While Loop via query-->
+                            <?php findAllCategories(); ?>
+
+                            <!--Delete category query-->
+                            <?php deleteCategories(); ?>
+
+                            <tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
             </div>
             <!-- /.row -->
 
@@ -37,6 +68,6 @@
 
     <!-- /#page-wrapper -->
 </div>
-
-<?php include "includes/footer.php" ?>
+    <!--Admin Footer-->
+<?php include "includes/admin_footer.php" ?>
 
