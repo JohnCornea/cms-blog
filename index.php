@@ -52,7 +52,7 @@
                     ?>
 
                     <h1 class="page-header">
-                        Page Heading
+                        Page Heading Github Testing Git Test
                         <small>Secondary Text</small>
                     </h1>
 
