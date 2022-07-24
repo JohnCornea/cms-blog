@@ -6,7 +6,7 @@
 
         // to loop through the checkboxArray
         foreach ($_POST['checkBoxArray'] as $postValueId) {
-           $bulk_options = $_POST['bulk_options'];
+           $bulk_options = escape($_POST['bulk_options']);
 
            switch ($bulk_options) {
                case 'published':
@@ -158,7 +158,7 @@
         //            header("Location: posts.php");
         //        }
             if (isset($_GET['reset'])) {
-                $the_post_id = $_GET['reset'];
+                $the_post_id = escape($_GET['reset']);
 
                 $query = "UPDATE posts SET post_views_count = 0 WHERE post_id =" . mysqli_real_escape_string($connection, $_GET['reset']) . "";
                 $reset_query = mysqli_query($connection, $query);
