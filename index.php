@@ -4,6 +4,7 @@
 <?php include "includes/header.php"; ?>
 <!-- Navigation -->
 <?php include "includes/navigation.php"; ?>
+<?php include "./admin/functions.php"; ?>
 
 <!-- Page Content -->
 <div class="container">
@@ -17,7 +18,7 @@
             $per_page = 4;
 
             if (isset($_GET['page'])) {
-                $page = $_GET['page'];
+                $page = escape($_GET['page']);
             } else {
                 $page = "";
             }

@@ -1,5 +1,12 @@
 <?php
 
+// implementation for safety against the MYSQL Injections
+function escape($string) {
+    global $connection;
+
+    return mysqli_real_escape_string($connection, trim($string));
+}
+
 function users_online()
 {
 
