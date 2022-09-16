@@ -28,15 +28,25 @@
                 $page_1 = ($page * $per_page) - $per_page;
             }
 
-            // query to count the number of the posts, needed for the paginator
-            $post_query_count = "SELECT * FROM posts";
-            $find_count = mysqli_query($connection, $post_query_count);
+            if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') {
+                $query = "SELECT * FROM posts";
+
+            } else {
+                $query = "SELECT * FROM posts WHERE post_status = 'published'";
+            }
+
+            // variable to count the # of items per page, needed for the paginator
+            $find_count = mysqli_query($connection, $query);
             $count = mysqli_num_rows($find_count);
+
+            if ($count < 1) {
+                echo "<h1 class='text-center'>No posts available</h1>";
+            } else {
 
             $count = ceil($count / $per_page);
 
 
-            $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
+            $query .= " LIMIT $page_1, $per_page";
             $select_all_posts_query = mysqli_query($connection, $query);
 
             while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
@@ -49,7 +59,6 @@
                 $post_content = substr($row['post_content'], 0, 250);
                 $post_status = $row['post_status'];
 
-                if ($post_status === 'published') {
                     ?>
 
                     <h1 class="page-header">
@@ -80,8 +89,7 @@
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                     <hr>
-                <?php } ?>
-            <?php } ?>
+                <?php } } ?>
 
         </div>
         <!-- Blog Sidebar Widgets Column -->
