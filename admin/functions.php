@@ -118,4 +118,34 @@ function deleteCategories()
         header("Location: categories.php");
     }
 }
+/*** refactoring the code for getting the posts, users, comments, etc. ***/
+function recordCount($table) {
+    global $connection;
 
+    $query = "SELECT * FROM " . $table;
+    $select_all_posts = mysqli_query($connection, $query);
+
+    $result = mysqli_num_rows($select_all_posts);
+
+    confirmQuery($result);
+
+    return $result;
+}
+/*** refactoring checking the status of the posts implementation ***/
+function checkStatus($table, $column, $status) {
+    global $connection;
+
+    $query = "SELECT * FROM $table WHERE $column = '$status' ";
+    $result = mysqli_query($connection, $query);
+
+    return mysqli_num_rows($result);
+}
+
+function checkUserRole($table, $column, $role) {
+    global $connection;
+
+    $query = "SELECT * FROM $table WHERE $column = '$role'";
+    $select_all_subscribers = mysqli_query($connection, $query);
+
+    return mysqli_num_rows($select_all_subscribers);
+}
