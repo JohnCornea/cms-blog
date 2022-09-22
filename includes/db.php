@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <?php
 
 //#1 a secured way to connect to the db

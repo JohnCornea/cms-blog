@@ -1,5 +1,9 @@
 <?php
 
+function redirect($location) {
+    return header("Location:" . $location);
+}
+
 // implementation for safety against the MYSQL Injections
 function escape($string) {
     global $connection;
@@ -9,7 +13,6 @@ function escape($string) {
 
 function users_online()
 {
-
     if ($_GET['onlineusers']) {
 
         global $connection;
@@ -100,8 +103,8 @@ function findAllCategories()
         echo "<td>{$cat_id}</td>";
         echo "<td>{$cat_title}</td>";
         // one line, deleting the article based on Id
-        echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
-        echo "<td><a href='categories.php?edit={$cat_id}'>Update</a></td>";
+        echo "<td><a class='btn btn-danger' href='categories.php?delete={$cat_id}'>Delete</a></td>";
+        echo "<td><a class='btn btn-info' href='categories.php?edit={$cat_id}'>Update</a></td>";
         echo "</tr>";
     }
 }
@@ -148,4 +151,100 @@ function checkUserRole($table, $column, $role) {
     $select_all_subscribers = mysqli_query($connection, $query);
 
     return mysqli_num_rows($select_all_subscribers);
+}
+
+function is_admin($username = '') {
+    global $connection;
+
+    $query = "SELECT user_role FROM users WHERE user_name = '$username'";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    $row = mysqli_fetch_array($result);
+
+    if ($row['user_role'] === 'admin') {
+        return true;
+    } else {
+        return false;
+    }
+}
+/** check if username already exists */
+function username_exists($username) {
+    global $connection;
+
+    $query = "SELECT user_name FROM users WHERE user_name = '$username'";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    if (mysqli_num_rows($result) > 0) {
+        return true;
+    } else
+        return false;
+}
+/** check if email already exists */
+function email_exists($email) {
+    global $connection;
+
+    $query = "SELECT user_email FROM users WHERE user_email = '$email' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    if (mysqli_num_rows($result) > 0) {
+        return true;
+    } else
+        return false;
+}
+
+function register_user($username, $email, $password) {
+    global $connection;
+
+        $username = mysqli_real_escape_string($connection, $username);
+        $email = mysqli_real_escape_string($connection, $email);
+        $password = mysqli_real_escape_string($connection, $password);
+
+        // encryption update implementation, better and safer
+        $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+
+        $query = "INSERT INTO users (user_name, user_email, user_password, user_role) ";
+        $query .= "VALUES('{$username}','{$email}','{$password}', 'subscriber' )";
+        $register_user_query = mysqli_query($connection, $query);
+        confirmQuery($register_user_query);
+}
+
+function login_user($username, $password) {
+    global $connection;
+
+    $username = trim($username);
+    $password = trim($password);
+
+    // not sure if I need this
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
+
+    $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
+    $select_user_query = mysqli_query($connection, $query);
+    if (!$select_user_query) {
+        die("QUERY FAILED". mysqli_error($connection));
+    }
+
+    while ($row = mysqli_fetch_array($select_user_query)) {
+        $db_user_id = $row['user_id'];
+        $db_user_name = $row['user_name'];
+        $db_user_password = $row['user_password'];
+        $db_user_firstname = $row['user_firstname'];
+        $db_user_lastname = $row['user_lastname'];
+        $db_user_role = $row['user_role'];
+    }
+
+    if (password_verify($password, $db_user_password)) {
+        $_SESSION['user_name'] =  $db_user_name;
+        $_SESSION['firstname'] =  $db_user_firstname;
+        $_SESSION['lastname'] =  $db_user_lastname;
+        $_SESSION['user_role'] =  $db_user_role;
+
+        header("Location: ../admin");
+
+    } else {
+        header("Location: ../index.php");
+    }
 }
