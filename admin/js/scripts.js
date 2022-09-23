@@ -2,6 +2,7 @@ $(document).ready(function() {
     $('#summernote').summernote({
         height: 200
     });
+
     // select all post checkboxes by clicking the default one
     $('#selectAllBoxes').click(function (event) {
         if (this.checked) {
