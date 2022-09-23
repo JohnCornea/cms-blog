@@ -13,7 +13,7 @@ function escape($string) {
 
 function users_online()
 {
-    if ($_GET['onlineusers']) {
+    if (isset($_GET['onlineusers'])) {
 
         global $connection;
 
