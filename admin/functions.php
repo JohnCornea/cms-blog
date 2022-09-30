@@ -1,7 +1,31 @@
 <?php
 
 function redirect($location) {
-    return header("Location:" . $location);
+    header("Location:" . $location);
+    exit;
+}
+
+function ifItIsMethod($method=null){
+
+    if($_SERVER['REQUEST_METHOD'] == strtoupper($method)){
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn(){
+
+    if(isset($_SESSION['user_role'])){
+        return true;
+    }
+    return false;
+}
+
+function checkIfUserIsLoggedInAndRedirect($redirectLocation=null){
+
+    if(isLoggedIn()){
+        redirect($redirectLocation);
+    }
 }
 
 // implementation for safety against the MYSQL Injections
@@ -214,6 +238,8 @@ function register_user($username, $email, $password) {
 function login_user($username, $password) {
     global $connection;
 
+    if (session_status() === PHP_SESSION_NONE) session_start();
+
     $username = trim($username);
     $password = trim($password);
 
@@ -234,17 +260,18 @@ function login_user($username, $password) {
         $db_user_firstname = $row['user_firstname'];
         $db_user_lastname = $row['user_lastname'];
         $db_user_role = $row['user_role'];
+
+        if (password_verify($password, $db_user_password)) {
+            $_SESSION['user_name'] =  $db_user_name;
+            $_SESSION['firstname'] =  $db_user_firstname;
+            $_SESSION['lastname'] =  $db_user_lastname;
+            $_SESSION['user_role'] =  $db_user_role;
+
+            header("Location: ../admin");
+
+        } else {
+            return false;
+        }
     }
-
-    if (password_verify($password, $db_user_password)) {
-        $_SESSION['user_name'] =  $db_user_name;
-        $_SESSION['firstname'] =  $db_user_firstname;
-        $_SESSION['lastname'] =  $db_user_lastname;
-        $_SESSION['user_role'] =  $db_user_role;
-
-        header("Location: ../admin");
-
-    } else {
-        header("Location: ../index.php");
-    }
+    return true;
 }
