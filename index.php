@@ -4,7 +4,7 @@
 <?php include "includes/header.php"; ?>
 <!-- Navigation -->
 <?php include "includes/navigation.php"; ?>
-<?php include "./admin/functions.php"; ?>
+<?php require_once "./admin/functions.php"; ?>
 
 <!-- Page Content -->
 <div class="container">

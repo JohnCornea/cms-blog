@@ -1,4 +1,5 @@
 <?php session_start(); ?>
+<?php require_once "admin/functions.php" ?>
 
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -42,9 +43,24 @@
                     echo "<li class='$category_class'><a href='category/$cat_id'>{$cat_title}</a></li>";
                 }
                 ?>
-                <li>
-                    <a href="/admin">Admin</a>
-                </li>
+
+                <?php if(isLoggedIn()): ?>
+
+                    <li>
+                        <a href="/admin">Admin</a>
+                    </li>
+                    <li>
+                        <a href="/includes/logout.php">Logout</a>
+                    </li>
+
+                <?php else: ?>
+
+                    <li>
+                        <a href="/login.php">Login</a>
+                    </li>
+
+                <?php endif; ?>
+
                 <li class="<?php echo $registration_class ?>">
                     <a href="/registration">Registration</a>
                 </li>
