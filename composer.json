@@ -1,0 +1,20 @@
+{
+  "name": "vendor_name/cms-udemy",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "sandra",
+      "email": "email@example.com"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "classes"
+    ]
+  },
+  "require": {
+    "phpmailer/phpmailer": "^6.6"
+  }
+}
