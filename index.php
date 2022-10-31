@@ -32,7 +32,7 @@
                 $query = "SELECT * FROM posts";
 
             } else {
-                $query = "SELECT * FROM posts WHERE post_status = 'published'";
+                $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id DESC";
             }
 
             // variable to count the # of items per page, needed for the paginator
@@ -81,7 +81,7 @@
                     <hr>
                     <!--When the pic is clicked the single post will be displayed-->
                     <a href="post/<?php echo $post_id; ?>">
-                        <img class="img-responsive" src="images/<?php echo $post_image; ?>" alt="">
+                        <img class="img-responsive" src="images/<?php echo imagePlaceholder($post_image); ?>" alt="">
                     </a>
                     <hr>
                     <p><?php echo $post_content ?></p>

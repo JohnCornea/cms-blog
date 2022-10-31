@@ -93,11 +93,14 @@ if (isset($_POST['checkBoxArray'])) {
         <tbody>
         <?php
         //        $query = "SELECT * FROM posts ORDER BY post_id DESC";
+        // creating implementation needed to display in the admin view all posts, only the posts from a specific user
+        $user = currentUser();
+
         /*** joining tables ***/
         $query = "SELECT posts.post_id, posts.post_author, posts.post_user, posts.post_title, posts.post_category_id, posts.post_status, posts.post_image, ";
         $query .= "posts.post_tags, posts.post_comment_count, posts.post_date, posts.post_views_count, categories.cat_id, categories.cat_title ";
         $query .= " FROM posts ";
-        $query .= " LEFT JOIN categories ON posts.post_category_id = categories.cat_id ORDER BY posts.post_id DESC ";
+        $query .= " LEFT JOIN categories ON posts.post_category_id = categories.cat_id WHERE posts.post_user = '$user' ORDER BY posts.post_id DESC ";
 
         $select_posts = mysqli_query($connection, $query);
 
