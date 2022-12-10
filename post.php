@@ -6,6 +6,48 @@
 <!-- Navigation -->
 <?php include "includes/navigation.php"; ?>
 
+<?php
+
+if (isset($_POST['liked'])) {
+    $post_id = $_POST['post_id'];
+    $user_id = $_POST['user_id'];
+
+    // #1 -> FETCHING THE RIGHT POST
+    $query = "SELECT * FROM posts WHERE post_id=$post_id";
+    $postResult = mysqli_query($connection, $query);
+    $post = mysqli_fetch_array($postResult);
+    $likes = $post['likes'];
+
+    // #2 -> UPDATE - INCREMENTING WITH LIKES
+    mysqli_query($connection, "UPDATE posts SET likes=$likes+1 WHERE post_id=$post_id");
+
+    // #3 -> CREATE LIKES FOR POST
+    mysqli_query($connection, "INSERT INTO likes(user_id, post_id) VALUES($user_id, $post_id)");
+    exit();
+}
+
+if (isset($_POST['unliked'])) {
+//    echo "UNLIKED!";
+    $post_id = $_POST['post_id'];
+    $user_id = $_POST['user_id'];
+
+    // #1 -> FETCHING THE RIGHT POST
+    $query = "SELECT * FROM posts WHERE post_id=$post_id";
+    $postResult = mysqli_query($connection, $query);
+    $post = mysqli_fetch_array($postResult);
+    $likes = $post['likes'];
+
+    // #2 DELETE LIKES
+    mysqli_query($connection, "DELETE FROM likes WHERE post_id=$post_id AND user_id=$user_id");
+
+    // #3 -> UPDATE - DECREMENTING WITH LIKES
+    mysqli_query($connection, "UPDATE posts SET likes=$likes-1 WHERE post_id=$post_id");
+    exit();
+
+}
+
+?>
+
 <!-- Page Content -->
 <div class="container">
 
@@ -64,10 +106,44 @@
                         <img class="img-responsive" src="images/<?php echo imagePlaceholder($post_image); ?>" alt="">
                         <hr>
                         <p><?php echo $post_content ?></p>
-                        <!--                <a class="btn btn-primary" href="#">Read More-->
-                        <!--                    <span class="glyphicon glyphicon-chevron-right"></span>-->
-                        <!--                </a>-->
+
+                        <?php
+                        // Must convert few things to STMT, lesson #320. Comeback
+//                        mysqli_stmt_free_result($stmt);
+
+                        ?>
+
+                        <a class="btn btn-primary" href="#">Read More
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
                         <hr>
+
+                        <?php
+
+                            if (isLoggedIn()) { ?>
+                                <!-- Adding the div for #no of Likes per posts -->
+                                <div class="row">
+                                    <p class="pull-right"><a class="<?php echo userLikedThisPost($the_post_id) ? 'unlike' : 'like'; ?>"
+                                                             href="javascript:window.location.href=window.location.href"><span
+                                                             class="glyphicon glyphicon-thumbs-up"
+                                                             data-toggle="tooltip"
+                                                             data-placement="top"
+                                                             title="<?php echo userLikedThisPost($the_post_id) ? ' I liked this before' : ' Want to like it?'; ?>"
+                                            ></span>
+                                            <?php echo userLikedThisPost($the_post_id) ? ' Unlike' : ' Like'; ?></a></p>
+                                </div>
+                            <?php } else { ?>
+                                <div class="row">
+                                    <p class="pull-right login-to-post">You need to <a href="/login.php">Login</a> to like</p>
+                                </div>
+                            <?php }
+                        ?>
+
+
+                        <div class="row">
+                            <p class="pull-right likes">Like: <?php getPostLikes($the_post_id); ?></p>
+                        </div>
+                        <div class="clearfix"></div>
                     <?php }
 
 
@@ -175,14 +251,46 @@
 </div>
 <!-- /.container -->
 
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-
-</body>
-
-</html>
-
 <?php include "includes/footer.php"; ?>
+
+<script>
+    jQuery(document).ready(function () {
+
+        // Making sure the tooltip for LIKING/UNLIKING works, by activating it with jQuery
+        jQuery("[data-toggle='tooltip']").tooltip();
+        var post_id = <?php echo $the_post_id; ?>;
+        var user_id = <?php echo loggedInUserId(); ?>;
+
+        // LIKING
+        jQuery('.like').click(function (e) {
+            // e.preventDefault();
+            console.log('IT WORKSSSSSSSSSSSSS');
+            // ajax to send requests to the server
+            jQuery.ajax({
+                url: "/post.php?p_id=<?php echo $the_post_id; ?>",
+                type: 'post',
+                data: {
+                    'liked': 1,
+                    'post_id': post_id,
+                    'user_id': user_id
+                }
+            });
+        });
+
+        // UNLIKING
+        jQuery('.unlike').click(function (e) {
+            // e.preventDefault();
+            console.log('UNLIKED BUTTON WORKS');
+            // ajax to send requests to the server
+            jQuery.ajax({
+                url: "/post.php?p_id=<?php echo $the_post_id; ?>",
+                type: 'post',
+                data: {
+                    'unliked': 1,
+                    'post_id': post_id,
+                    'user_id': user_id
+                }
+            });
+        });
+    });
+</script>

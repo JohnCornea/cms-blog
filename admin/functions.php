@@ -2,7 +2,7 @@
 
 function imagePlaceholder($image='') {
     if (!$image) {
-        return 'no-photo.jpg';
+        return 'cms-no-photo.jpg';
     } else {
         return $image;
     }
@@ -18,6 +18,12 @@ function currentUser() {
 function redirect($location) {
     header("Location:" . $location);
     exit;
+}
+
+function query($query) {
+    global $connection;
+
+    return mysqli_query($connection, $query);
 }
 
 function ifItIsMethod($method=null){
@@ -36,6 +42,26 @@ function isLoggedIn(){
     return false;
 }
 
+function loggedInUserId() {
+//    if (session_status() == PHP_SESSION_NONE) session_start();
+    if (isLoggedIn()) {
+        $result = query("SELECT * FROM users WHERE user_name='" . $_SESSION['user_name'] . "'");
+        confirmQuery($result);
+        $user = mysqli_fetch_array($result);
+
+        return mysqli_num_rows($result) >= 1 ? $user['user_id'] : false;
+    }
+    return false;
+}
+
+function userLikedThisPost($post_id) {
+    $result = query("SELECT * FROM likes WHERE user_id = " . loggedInUserId() . " AND post_id=$post_id");
+    confirmQuery($result);
+//    var_dump($result);
+
+    return mysqli_num_rows($result) >= 1 ? true : false;
+}
+
 function checkIfUserIsLoggedInAndRedirect($redirectLocation=null){
 
     if(isLoggedIn()){
@@ -43,7 +69,14 @@ function checkIfUserIsLoggedInAndRedirect($redirectLocation=null){
     }
 }
 
-// implementation for safety against the MYSQL Injections
+// Fetching all Likes in the post
+function getPostLikes($post_id) {
+    $result = query("SELECT * FROM likes WHERE post_id=$post_id");
+    confirmQuery($result);
+    echo mysqli_num_rows($result);
+}
+
+// Implementation for safety against the MYSQL Injections
 function escape($string) {
     global $connection;
 

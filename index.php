@@ -14,6 +14,12 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
+            <h1 class="page-header">
+                Welcome to all our posts!
+                <br>
+                <small>Enjoy your stay!</small>
+            </h1>
+
             <?php
             $per_page = 4;
 
@@ -60,11 +66,6 @@
                 $post_status = $row['post_status'];
 
                     ?>
-
-                    <h1 class="page-header">
-                        Page Heading Github Testing Git Test
-                        <small>Secondary Text</small>
-                    </h1>
 
                     <!-- First Blog Post -->
                     <!--Count of the total of pagination pages-->
