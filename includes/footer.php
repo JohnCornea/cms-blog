@@ -8,3 +8,15 @@
     </div>
     <!-- /.row -->
 </footer>
+
+</div>
+<!-- ./container -->
+
+<!-- jQuery -->
+<script src="/js/jquery.js"></script>
+
+<!-- Bootstrap Core Javascript -->
+<script src="/js/bootstrap.min.js"></script>
+
+</body>
+</html>
