@@ -4,6 +4,7 @@
         // code from above does not work, only after implementing mysqli_real_escape_string
         $post_title = mysqli_real_escape_string($connection, $_POST['title']);
         $post_user = mysqli_real_escape_string($connection, $_POST['post_user']);
+        $user_id = loggedInUserId();
         $post_category_id = mysqli_real_escape_string($connection, $_POST['post_category']);
         $post_status = mysqli_real_escape_string($connection, $_POST['post_status']);
 
@@ -18,10 +19,10 @@
         // function to move the file from temp location to the outside folder
         move_uploaded_file($post_image_temp, "../images/$post_image");
 
-        $query = "INSERT INTO posts(post_category_id,post_title,post_user,post_date,post_image,post_content,post_tags,post_status ) ";
+        $query = "INSERT INTO posts(post_category_id,post_title,post_user,user_id,post_date,post_image,post_content,post_tags,post_status ) ";
 
         // these values are coming from our form, we use single quotes because most of them are strings
-        $query .= "VALUES({$post_category_id},'{$post_title}','{$post_user}',now(),'{$post_image}',
+        $query .= "VALUES({$post_category_id},'{$post_title}','{$post_user}','{$user_id}',now(),'{$post_image}',
         '{$post_content}','{$post_tags}','{$post_status}' ) ";
 
         $create_post_query = mysqli_query($connection, $query);
