@@ -1,1 +1,1 @@
-This is my CMS project made in PHP.
+This is a CMS project made in PHP
