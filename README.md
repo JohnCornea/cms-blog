@@ -7,5 +7,5 @@ Things that I've learnt during this project:
  - How to use AJAX to submit data to the server without refreshing the page
  - PHP security protocols
  - Sessions
- - Password hashing
+ - Password hashing encryption
  - Email sending
