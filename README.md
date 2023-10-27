@@ -6,6 +6,6 @@ Things that I've learnt during this project:
  - Launch the app online
  - How to use AJAX to submit data to the server without refreshing the page
  - PHP security protocols
- - Sessions
+ - PHP Sessions
  - Password hashing encryption
  - Email sending
