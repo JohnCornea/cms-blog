@@ -8,4 +8,4 @@ Things that I've learnt during this project:
  - Implementing PHP security protocols
  - PHP Sessions
  - Password hashing encryption
- - Email sending
+ - Email sending feature
