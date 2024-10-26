@@ -9,3 +9,4 @@ Things that I've learnt during this project:
  - PHP Sessions
  - Password hashing encryption
  - Email sending feature implemented
+   
